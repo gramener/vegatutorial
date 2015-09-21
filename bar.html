@@ -1,0 +1,88 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="utf8">
+  <title>A simple bar chart - Vega Tutorial - by Gramener</title>
+  <link rel="import" href="import.html">
+</head><body>
+
+<div class="container">
+  <h1 class="page-title">A simple bar chart</h1>
+
+  <p>Here's an example of a bar chart created using <a href="http://vega.github.io/vega/">Vega</a></p>
+  <vega-chart href="bar.json"></vega-chart>
+
+  <p>You can create this chart by running this Vega specification:</p>
+  <pre is="load-file" href="bar.json"></pre>
+
+  <p>Let's break this step by step. First, we define the width and height of the visualisation in pixels. By default, Vega uses a 500px x 500px rectangle for the bar chart region (excluding axes area). <a target="_blank" href="https://github.com/vega/vega/wiki/Visualization">See visualisation properties</a></p>
+  <pre>
+    "width": 400,     // Width of the visual in pixels
+    "height": 200,    // Height of the visual in pixels
+  </pre>
+
+  <p>We then load the data. Vega supports different <a target="_blank" href="https://github.com/vega/vega/wiki/Data">data formats</a> such as JSON, CSV, etc. For this example, we use array of data objects. <code>data</code> property is defined with array of data definitions. Data sets in Vega can also be modified using <a target="_blank" href="https://github.com/vega/vega/wiki/Data-Transforms">Data transformations</a>.</p>
+  <pre>
+    "data": [
+      {
+        "name": "table",                  // Name of the dataset
+        "values": [                       // data is defined inside "values" as
+          {"category":"A", "amount":28},  // array of data objects with
+          {"category":"B", "amount":55},  // "category" (a string label) and
+          {"category":"C", "amount":43},  // "amount" (a number) field
+          {"category":"D", "amount":91}
+        ]
+      }
+    ],
+  </pre>
+
+  <p> The <a target="_blank" href="https://github.com/vega/vega/wiki/Scales">"scales"</a> section defines how to map data values to visual values (pixel positions, colors etc.). Here we've defined two scales, one each for the X <code>"xscale"</code> and Y <code>"yscale"</code>. The default scale type is a quantitative linear scale.</p>
+  <pre>
+    "scales": [
+      {"name": "xscale",                   // Create a scale named "xscale"
+       "type": "ordinal",                  // on ordinal scale
+       "domain": {"data": "table",         // From "table" data
+                  "field": "category"},    // Map "category" values
+       "range": "width"},                  // to visual width
+      {"name": "yscale",                   // Create a scale named "xscale"
+       "domain": {"data": "table",         // From "table" data
+                  "field": "amount"},      // Map "amount" values
+        "range": "height"}                 // to visual height
+    ],
+  </pre>
+
+  <p> The <a target="_blank" href="https://github.com/vega/vega/wiki/Axes">"axes"</a> section defines how to visualize scales using ticks and labels. Based on their type, axes are automatically placed at the borders of the visual.</p>
+  <pre>
+    "axes": [
+      { "type": "x", "scale": "xscale" },  // horizontal x-axis type with xscale
+      { "type": "y", "scale": "yscale" }   // vertical y-axis type with yscale
+    ],
+  </pre>
+
+  <p>The <a target="_blank" href="https://github.com/vega/vega/wiki/Marks">"marks"</a> section defines how each data element we have is drawn.</p>
+  <pre>
+    "marks": [                          // The marks / visuals to be drawn here
+      {
+        "type": "rect",                 // is a rect that
+        "from": {"data": "table"},      // takes data from the "table" dataset
+  </pre>
+
+  <p>The properties of the rect can be adjusted at 3 different points: when it is created (<code>"enter"</code>), when it is redrawn (<code>"update"</code>) and when it is removed (<code>"exit"</code>). Here, when the rect is created, its x, width, y, y2 and fill attributes are set.</p>
+  <pre>
+      "properties": {                                                 // Set these properties for rects
+        "enter": {                                                    // when they are created
+          "x": {"scale": "xscale", "field": "category"},              // x value by applying "xscale" to "category" data
+          "width": {"scale": "xscale", "band": true, "offset": -1},   // uniformly sized widths by setting "band" and reduce by 1px offset
+          "y": {"scale": "yscale", "field": "amount"},                // y value by applying "yscale" to "amount" data
+          "y2": {"scale": "yscale", "value":0},                       // and set other edge of each bar is always at zero
+          "fill":{"value": "steelblue"}                               // filled with blue
+  </pre>
+
+  <h2>Exercises</h2>
+  <p>This was a minimal example that shows how to create a bar chart. Using these concepts, try the following:</p>
+
+  <ol>
+    <li>Color the bars based on the <code>"Amount"</code>. The colors should automatically scale from the lowest (light blue) to the highest (dark blue) <code>"Amount"</code> (<strong>Hint</strong>: <a target="_blank" href="https://github.com/vega/vega/wiki/Scales#scale-domains">Scale domains</a> can be field names.)</li>
+  </ol>
+
+</div>
+</body></html>

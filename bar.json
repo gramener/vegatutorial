@@ -1,0 +1,49 @@
+{
+  "width": 400,
+  "height": 200,
+
+  "data": [
+    {
+      "name": "table",
+      "values": [
+        {"category":"A", "amount":28},
+        {"category":"B", "amount":55},
+        {"category":"C", "amount":43},
+        {"category":"D", "amount":91}
+      ]
+    }
+  ],
+
+  "scales": [
+    {"name": "xscale",
+     "type": "ordinal",
+     "domain": {"data": "table",
+                "field": "category"},
+     "range": "width"},
+    {"name": "yscale",
+     "domain": {"data": "table",
+                "field": "amount"},
+      "range": "height"}
+  ],
+
+  "axes": [
+    {"type": "x", "scale": "xscale"},
+    {"type": "y", "scale": "yscale"}
+  ],
+
+  "marks": [
+    {
+      "type": "rect",
+      "from": {"data":"table"},
+      "properties": {
+        "enter": {
+          "x": {"scale": "xscale", "field": "category"},
+          "width": {"scale": "xscale", "band": true, "offset": -1},
+          "y": {"scale": "yscale", "field": "amount"},
+          "y2": {"scale": "yscale", "value":0},
+          "fill":{"value": "steelblue"}
+        }
+      }
+    }
+  ]
+}
