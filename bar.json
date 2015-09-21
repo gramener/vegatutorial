@@ -1,47 +1,44 @@
 {
   "width": 400,
   "height": 200,
-
   "data": [
     {
       "name": "table",
       "values": [
-        {"category":"A", "amount":28},
-        {"category":"B", "amount":55},
-        {"category":"C", "amount":43},
-        {"category":"D", "amount":91}
+        {"x": 1,  "y": 28},
+        {"x": 2,  "y": 55},
+        {"x": 3,  "y": 43},
+        {"x": 4,  "y": 90}
       ]
     }
   ],
-
   "scales": [
     {"name": "xscale",
      "type": "ordinal",
      "domain": {"data": "table",
-                "field": "category"},
+                "field": "x"},
      "range": "width"},
     {"name": "yscale",
+     "type": "linear",
      "domain": {"data": "table",
-                "field": "amount"},
-      "range": "height"}
+                "field": "y"},
+     "range": "height"}
   ],
-
   "axes": [
     {"type": "x", "scale": "xscale"},
     {"type": "y", "scale": "yscale"}
   ],
-
   "marks": [
     {
       "type": "rect",
-      "from": {"data":"table"},
+      "from": {"data": "table"},
       "properties": {
         "enter": {
-          "x": {"scale": "xscale", "field": "category"},
+          "x": {"scale": "xscale", "field": "x"},
           "width": {"scale": "xscale", "band": true, "offset": -1},
-          "y": {"scale": "yscale", "field": "amount"},
-          "y2": {"scale": "yscale", "value":0},
-          "fill":{"value": "steelblue"}
+          "y": {"scale": "yscale", "field": "y"},
+          "y2": {"scale": "yscale", "value": 0},
+          "fill": {"value": "steelblue"}
         }
       }
     }
