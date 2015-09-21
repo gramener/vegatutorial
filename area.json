@@ -1,0 +1,50 @@
+{
+  "width": 400,
+  "height": 200,
+  "data": [
+    {
+      "name": "table",
+      "values": [
+        {"x": 1,  "y": 28},
+        {"x": 2,  "y": 55},
+        {"x": 3,  "y": 43},
+        {"x": 4,  "y": 90}
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "xscale",
+      "type": "linear",
+      "domain": {"data": "table",
+                 "field": "x"},
+      "range": "width",
+      "zero": false
+    },
+    {
+      "name": "yscale",
+      "type": "linear",
+      "domain": {"data": "table",
+                 "field": "y"},
+      "range": "height"
+    }
+  ],
+  "axes": [
+    {"type": "x", "scale": "xscale", "ticks": 4},
+    {"type": "y", "scale": "yscale"}
+  ],
+  "marks": [
+    {
+      "type": "area",
+      "from": {"data": "table"},
+      "properties": {
+        "enter": {
+          "x": {"scale": "xscale", "field": "x"},
+          "y": {"scale": "yscale", "field": "y"},
+          "y2": {"scale": "yscale", "value": 0},
+          "fill": {"value": "steelblue"}
+        }
+      }
+    }
+  ]
+}

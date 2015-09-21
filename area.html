@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="utf8">
+  <title>Changing chart types -- area chart - Vega Tutorial - by Gramener</title>
+  <link rel="import" href="import.html">
+</head><body>
+
+<div class="container">
+  <h1 class="page-title">Changing chart types -- area chart</h1>
+
+  <p>This example shows how to plot areachart based on <a href="bar.html">barchart</a> example.
+  <vega-chart href="area.json"></vega-chart>
+
+  <p>The Vega spec <a href="area.json">area.json</a> is quite similar to how we constructed the <a href="bar.html">barchart</a>. Let's look at what's different.</p>
+
+  <p> The <a target="_blank" href="https://github.com/vega/vega/wiki/Scales">"scales"</a> section defines how to map data values to visual values (pixel positions, colors etc.). Here, of two scales, X <code>"xscale"</code> needs few modifications.
+  <pre>
+    "scales": [
+      {
+        "name": "xscale",              // Create a scale named "xscale"
+        "type": "linear",              // on linear scale, and not ordinal
+        "domain": {"data": "table",    //
+                   "field": "x"},      //
+        "range": "width",              //
+        "zero": false                  // chart doesn't begin with zero scale
+      },
+  </pre>
+
+  <p> The <a target="_blank" href="https://github.com/vega/vega/wiki/Axes">"axes"</a> section for <code>"x"</code>axes we set the ticks</p>
+  <pre>
+    "axes": [
+      {"type": "x", "scale": "xscale", "ticks": 4},  // restrict ticks to 4 on x-axis
+  </pre>
+
+  <p>The <a target="_blank" href="https://github.com/vega/vega/wiki/Marks">"marks"</a> type is defined as <code>"area"</code></p>
+  <pre>
+    "marks": [
+      {
+        "type": "area",                 // mark type is area
+  </pre>
+
+  <p>The <code>"properties"</code> have similar definitions as <a href="bar.html">barchart</a>. However, in areachart <code>"width"</code> under <code>("enter")</code> needn't be defined like</p>
+  <pre>
+    "enter": {
+      "x": {"scale": "xscale", "field": "x"},
+      "y": {"scale": "yscale", "field": "y"},
+      "y2": {"scale": "yscale", "value": 0},
+      "fill": {"value": "steelblue"}
+  </pre>
+
+  <h2>Exercises</h2>
+  <p></p>
+
+  <ol>
+    <li></li>
+  </ol>
+
+</div>
+</body></html>
