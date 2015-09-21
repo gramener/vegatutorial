@@ -1,0 +1,65 @@
+{
+  "width": 600,
+  "height": 400,
+  "padding": 0,
+  "data": [
+    {
+      "name": "population",
+      "url": "data/CAN_adm1.population.csv",
+      "format": {
+        "type": "csv",
+        "parse": "auto"
+      }
+    },
+    {
+      "name": "canada",
+      "url": "data/CAN_adm1.json",
+      "format": { "type": "topojson", "feature": "CAN_adm1" },
+      "transform": [
+        {
+          "type": "geopath",
+          "projection": "albers",
+          "translate": [300, 400],
+          "scale": 600
+        },
+        {
+          "type": "lookup",
+          "on": "population",
+          "onKey": "Province",
+          "keys": ["properties.NAME_1"],
+          "as": ["pop"]
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "growth-color",
+      "type": "quantize",
+      "domain": [-3.0, -1.0, 0.0, 1.0, 3.0],
+      "range": [
+        "#d7191c",
+        "#fdae61",
+        "#ffffbf",
+        "#a6d96a",
+        "#1a9641"
+      ]
+    }
+  ],
+  "marks": [
+    {
+      "type": "path",
+      "from": { "data": "canada" },
+      "properties": {
+        "enter": {
+          "path": { "field": "layout_path" },
+          "stroke": { "value": "#888" },
+          "fill": {
+            "field": "pop.Growth",
+            "scale": "growth-color"
+          }
+        }
+      }
+    }
+  ]
+}

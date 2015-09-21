@@ -1,0 +1,90 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="utf8">
+  <title>Color the map - Vega Tutorial - by Gramener</title>
+  <link rel="import" href="import.html">
+</head><body>
+
+<div class="container">
+  <h1 class="page-title">Color the map</h1>
+
+  <p>This chart colors the map of Canada based on population growth between 2010 - 2014 &mdash; created using the Vega spec <a href="choropleth.json">choropleth.json</a>.</p>
+  <vega-chart href="choropleth.json"></vega-chart>
+
+  <p>Canada's population data is drawn from a <a target="_blank" href="data/CAN_adm1.population.csv">CSV file</a> that has the population from 2010 - 2014 for each province, and the overall growth rate (as a percentage.)</p>
+  <pre is="load-file" href="data/CAN_adm1.population.csv"></pre>
+
+  <p>The Vega spec <a href="choropleth.json">choropleth.json</a> is quite similar to how we constructed the <a href="map.html">map</a>. Let's look at what's different.</p>
+
+  <p>The <code>"data"</code> section has two datasets &mdash; <code>"population"</code> and <code>"canada"</code>:</p>
+  <pre>
+    "data": [
+      {
+        "name": "population",                   // Call this dataset "population"
+        "url": "data/CAN_adm1.population.csv",  // Load from this URL
+        "format": {
+          "type": "csv",      // The file is a CSV file
+          "parse": "auto"     // Convert column to number / date / boolean
+        }
+      },
+      {
+        "name": "canada",                 // Call this dataset "canada"
+        "url": "data/CAN_adm1.json",      // From this Canada TopoJSON file
+        "format": { "type": "topojson", "feature": "CAN_adm1" },
+        "transform": [                    // Transform the map
+          {                               // The first transform converts data
+            "type": "geopath",            // into paths
+            "projection": "albers",       // using the Albers projection
+            "translate": [300, 400],      // positioned using trial-and-error
+            "scale": 600                  // to fill the chart
+          },
+  </pre>
+
+  <p>At this point, the two datasets are disjoint. But there is a common key. The TopoJSON file has properties object, and the <code>NAME_1</code> property there is the province name. This <em>exactly</em> matches the <code>Province</code> column in the CSV file. (The dataset has been constructed that way.) To merge them, we use the <a target="_blank" href="https://github.com/vega/vega/wiki/Data-Transforms#-lookup">lookup</a> data transform.</p>
+  <pre>
+          {                                 // The second transform
+            "type": "lookup",               // fetches
+            "on": "population",             // from the population table
+            "onKey": "Province",            // rows where the Province column
+            "keys": ["properties.NAME_1"],  // match the NAME_1 property in the TopJSON
+            "as": ["pop"]                   // and saves the looked-up row as ".pop"
+          }
+  </pre>
+
+  <p>At this point, we have the data to color each province based on any population data. We'll use the <code>Growth</code> column to color the map. <a target="_blank" href="https://github.com/vega/vega/wiki/Scales">Scales</a> are used to convert numbers to colors. Here, we define a scale called <code>"growth-color"</code>:</p>
+  <pre>
+    "scales": [
+      {
+        "name": "growth-color",   // Create a scale named "growth-color"
+        "type": "quantize",       // Continuous numbers become discrete values
+        "domain": [-3.0, -1.0, 0.0, 1.0, 3.0],  // Map these numbers...
+        "range": [      // ...to this color scale:
+          "#d7191c",    // -3.0 is red
+          "#fdae61",    // -1.0 is orange
+          "#ffffbf",    //  0.0 is yellow
+          "#a6d96a",    //  1.0 is lime
+          "#1a9641"     //  3.0 is green
+        ]
+      }
+    ],
+  </pre>
+
+  <p>This scale can be used when drawing the map. Specifically, the <code>"fill"</code> property is no longer a plain <code>"value"</code>. Since we'd placed the looked-up population data as the <code>pop</code> field, we can get the growth from <code>pop.Growth</code>. To this, we apply the <code>"growth-color"</code> scale:</p>
+  <pre>
+            "fill": {                   // Set the fill color
+              "field": "pop.Growth",    // based on the Growth column from pop
+              "scale": "growth-color"   // using the growth-color scale
+            }
+  </pre>
+
+
+  <h2>Exercises</h2>
+  <p></p>
+
+  <ol>
+    <li>Color the provinces based on the population in 2014. The colors should automatically scale from the lowest (light blue) to the highest (dark blue) population. (<strong>Hint</strong>: <a target="_blank" href="https://github.com/vega/vega/wiki/Scales#scale-domains">Scale domains</a> can be field names.)</li>
+    <li>Draw a map of Australia using <a target="_blank" href="data/AUS_adm1.json">data/AUS_adm1.json</a>. Color the states based on their population density. To do this, you need to create a new file and populate it with <a target="_blank" href="https://en.wikipedia.org/wiki/States_and_territories_of_Australia">data from Wikipedia</a>. Remember: the list of States (mentioned in the <code>NAME_1</code> property in the TopoJSON file) may not exactly match the data from Wikipedia.</li>
+  </ol>
+
+</div>
+</body></html>
