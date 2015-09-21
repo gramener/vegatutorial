@@ -54,3 +54,24 @@ var MarkDown = (function() {
 
   return document.registerElement('mark-down', {prototype: proto})
 })()
+
+
+var LoadFile = (function() {
+  var proto = Object.create(HTMLPreElement.prototype)
+
+  proto.attachedCallback = function() {
+    var el = this,
+        href = el.getAttribute('href')
+
+    if (href)
+      d3.text(href, function(text) {
+        console.log(text)
+        el.innerHTML = text
+      })
+  }
+
+  return document.registerElement('load-file', {
+    prototype: proto,
+    extends: 'pre'
+  })
+})()

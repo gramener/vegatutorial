@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="utf8">
+  <title>Draw a map - Vega Tutorial - by Gramener</title>
+  <link rel="import" href="import.html">
+</head><body>
+
+<div class="container">
+  <h1 class="page-title">Draw a map</h1>
+
+  <p>Here's an example of a chart created using Vega:</p>
+  <vega-chart href="map.json"></vega-chart>
+
+  <p>You can create this chart by running this Vega specification:</p>
+  <pre is="load-file" href="map.json"></pre>
+
+  <p>Let's break this step by step. First, we define the width and height of the visualisation in pixels. By default, Vega uses a 500px x 500px rectangle. This code sets it to 600px x 600px. We also set the padding to 0. This prevents Vega from adding extra space on the side for labels. We don't need these for maps. <a target="_blank" href="https://github.com/vega/vega/wiki/Visualization">See visualisation properties</a></p>
+  <pre>
+    "width": 600,     // Width of the visual in pixels
+    "height": 400,    // Height of the visual in pixels
+    "padding": 0,     // Padding of the visual in pixels
+  </pre>
+
+  <p>We then load the data. Vega supports different <a target="_blank" href="https://github.com/vega/vega/wiki/Data">data formats</a> such as JSON, CSV, etc. For maps, we use <a target="_blank" href="https://github.com/mbostock/topojson">TopoJSON</a>. Here, we've used the <a target="_blank" href="data/world-110m.json">sample World map</a> provided along with <a target="_blank" href="https://github.com/mbostock/topojson/blob/master/examples/world-110m.json">TopoJSON</a>. A TopoJSON file can contain multiple "features". This particular map has a feature called "countries" that we want. All of this is stored in the dataset named "world" &mdash; a reference we will be using later.</p>
+  <pre>
+    "data": [{
+        "name": "world",                  // Name of the dataset
+        "url": "data/world-110m.json",    // Location to load from
+        "format": {
+          "type": "topojson",             // Dataset is parsed as TopoJSON
+          "feature": "countries"          // "countries" feature is extracted
+  </pre>
+
+  <p>The TopoJSON file has a hierarchical structure representing the boundaries and regions of each country. These need to be converted into positions for a path. These are done through <a target="_blank" href="https://github.com/vega/vega/wiki/Data-Transforms">transformations</a>. There are two kinds of transforms: data transforms (which modify the data, like grouping, filtering, etc.) and visual transforms (which create data for drawing visuals, like treemap rectangle positions, map paths, etc.)</p>
+
+  <p>In this case, we use the <a target="_blank" href="https://github.com/vega/vega/wiki/Data-Transforms#user-content--geopath">geopath</a> visual transform that converts TopoJSON into paths. This is fairly representative of how Vega works. There are a set of data formats. We use a series of transforms to convert them into other formats before drawing them.</p>
+  <pre>
+        "transform": [{                 // The "world" dataset is transformed
+          "type": "geopath"             // using "geopath", which converts a
+        }]                              // topojson feature into paths
+  </pre>
+
+  <p>The <a target="_blank" href="https://github.com/vega/vega/wiki/Marks">"marks"</a> section defines how each data element we have is drawn. After the geopath transform, the "world" dataset has an array of paths data. These are drawn using the <a target="_blank" href="https://github.com/vega/vega/wiki/Marks#user-content-path">"path"</a> type which creates renders the path and stores it in a field called <code>layout_path</code>.</p>
+  <pre>
+    "marks": [                          // The marks / visuals to be drawn here
+      {
+        "type": "path",                 // is a path that
+        "from": {"data": "world"},      // takes data from the "world" dataset
+  </pre>
+
+  <p>The properties of the path can be adjusted at 3 different points: when it is created (<code>"enter"</code>), when it is redrawn (<code>"update"</code>) and when it is removed (<code>"exit"</code>). Here, when the path is created, its path, fill and stroke attributes are set.</p>
+  <pre>
+        "properties": {                       // Set these properties for paths
+          "enter": {                          // when they are created.
+            "path": {"field": "layout_path"}, // Path based on layout_field
+            "fill": {"value": "steelblue"},   // Shapes filled in blue
+            "stroke": {"value": "#fff"}       // with a white border.
+  </pre>
+
+  <h2>Exercises</h2>
+  <p>This was a minimal example that shows how to create a map. Using these concepts, try the following:</p>
+
+  <ol>
+    <li>Draw a 300px x 500px map that is centered around Africa. Highlight the countries in grey with a white border. (<strong>Hint</strong>: See the scale and translate parameters of <a target="_blank" href="https://github.com/vega/vega/wiki/Data-Transforms#user-content--geopath">geopath</a>.)</li>
+    <li>
+  </ol>
+
+</div>
