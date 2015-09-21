@@ -65,7 +65,6 @@ var LoadFile = (function() {
 
     if (href)
       d3.text(href, function(text) {
-        console.log(text)
         el.innerHTML = text
       })
   }

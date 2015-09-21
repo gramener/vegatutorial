@@ -19,5 +19,9 @@
 </template>
 
 <script>
-
+// Automatically add the footer to the page
+var importDoc = document.currentScript.ownerDocument
+var footer = importDoc.querySelector('#footer')
+var clone = document.importNode(footer.content, true)
+document.body.appendChild(clone)
 </script>
