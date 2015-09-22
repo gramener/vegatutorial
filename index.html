@@ -9,22 +9,50 @@
 <div class="container">
   <h1 class="page-title">Vega Tutorial</h1>
 
-  <p><a target="_blank" href="http://vega.github.io/vega/">Vega</a> is a <em>declarative</em> data visualization library.</a>
+  <p><a target="_blank" href="http://vega.github.io/vega/">Vega</a> is a <em>declarative</em> data visualization library. There is no programming involved. You can use it to convert a <a target="_blank" href="http://www.json.org/">JSON</a> declaration like this:
+  <pre is="load-file" href="map.json"></pre>
 
-  <h2>An example of a Vega chart</h2>
+  <p>... into a visualization like this:</p>
+  <vega-chart href="map.json"></vega-chart>
 
-  <h2>How to set up Vega</h2>
+  <h2>Setting up Vega</h2>
 
-  <h2>Table of contents</h2>
+  <p>You can embed Vega in any HTML document. First, add a placeholder for the Vega chart:</p>
+  <pre>
+    &lt;div id="my-chart">&lt;/div>
+  </pre>
+
+  <p>Then, include the dependent libraries:</p>
+  <pre>
+    &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js">&lt;/script>
+    &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js">&lt;/script>
+    &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/vega/2.2.5/vega.min.js">&lt;/script>
+  </pre>
+
+  <p>Finally, render the Vega specification into that chart:</p>
+  <pre>
+    &lt;script>
+      var spec = {
+        // Vega Spec in JSON comes here. Try the spec at the top of this page
+      }
+      vg.parse.spec(spec, function(chart) {
+        chart({el: '#my-chart'}).update()
+      })
+    &lt;/script>
+  </pre>
+
+  <p>This tutorial teaches you how to create different types of charts, step-by-step.</p>
+
+  <h2>Tutorial contents</h2>
   <ol>
     <li><a href="map.html">Draw a map</a></li>
     <li><a href="choropleth.html">Color the map with scales</a></li>
-    <li><a href="bar.html">A simple bar chart</li>
-    <li><a href="area.html">Changing chart types -- area chart</li>
-    <li><a href="scatter.html">Changing chart types -- scatterplot</li>
-    <li><a href="symbols.html">Using other symbols in charts</li>
-    <li><a href="pie.html">Other layouts: pie charts</li>
-    <li><a href="heatmap.html">Multiple scales: heatmaps</li>
+    <li><a href="bar.html">A simple bar chart</a></li>
+    <li><a href="area.html">Changing chart types -- area chart</a></li>
+    <li><a href="scatter.html">Changing chart types -- scatterplot</a></li>
+    <li>Using other symbols in charts</li>
+    <li>Other layouts: pie charts</li>
+    <li>Multiple scales: heatmaps</li>
   </ol>
 
 </div>
