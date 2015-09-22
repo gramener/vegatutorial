@@ -19,7 +19,7 @@ var VegaChart = (function() {
     el.spec = spec
     el.innerHTML = ''
     vg.parse.spec(el.spec, function(chart) {
-      el.view = chart({el: el}).update()
+      el.view = chart({el: el, renderer: 'svg'}).update()
     })
   }
 
