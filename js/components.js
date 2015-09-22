@@ -74,3 +74,35 @@ var LoadFile = (function() {
     extends: 'pre'
   })
 })()
+
+
+var TableOfContents = (function() {
+  var proto = Object.create(HTMLElement.prototype)
+
+  proto.attachedCallback = function() {
+    var el = this,
+        href = el.getAttribute('href')
+    if (href)
+      d3.json(href, function(error, toc) {
+        var filename = location.pathname.split('/').pop() || 'index.html'
+        if (error)
+          return console.warn('Unable to load', href, error)
+        d3.select(el)
+          .append('div')
+          .classed('list-group', true)
+          .selectAll('a')
+            .data(toc)
+          .enter()
+            .append('a')
+            .classed('list-group-item', true)
+            .classed('active', function(row) { return row.href == filename })
+            .classed('disabled', function(row) { return !row.href })
+            .text(function(row) { return row.title })
+            .filter(function(row) { return row.href })
+            .attr('href', function(row) { return row.href })
+      })
+    else
+      draw_chart(JSON.parse(el.textContent), el)
+  }
+  return document.registerElement('table-of-contents', {prototype: proto})
+})()

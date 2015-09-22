@@ -1,0 +1,11 @@
+[
+    {"href": "index.html",      "title": "Vega tutorial"},
+    {"href": "map.html",        "title": "Draw a map"},
+    {"href": "choropleth.html", "title": "Color the map with scales"},
+    {"href": "bar.html",        "title": "A simple bar chart"},
+    {"href": "area.html",       "title": "Changing chart types: area chart"},
+    {"href": "scatter.html",    "title": "Changing chart types: scatter chart"},
+    {"href": "",                "title": "Using other symbols in charts"},
+    {"href": "",                "title": "Other layouts: pie charts"},
+    {"href": "",                "title": "Multiple scales: heatmaps"}
+]
